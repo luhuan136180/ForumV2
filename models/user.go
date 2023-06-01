@@ -1,6 +1,8 @@
 package models
 
-import "time"
+import (
+	"time"
+)
 
 type User struct {
 	UserAddress string `db:"user_address"`
@@ -25,6 +27,13 @@ type UserInformation struct {
 	UserName    string    `json:"user_name"db:"user_name"`
 	Balance     int       `json:"balance"db:"balance"`
 	CreateTime  time.Time `json:"create_time"db:"create_time"`
+	Age         int       `json:"age"db:"age"`
+	Email       string    `json:"eamil"db:"email"`
+	Gender      string    `json:"gender"db:"gender"` //0:男 ；1：女
+	Signature   string    `json:"signature"db:"signature"`
+	HeadPicture string    `json:"head_picture"db:"picture_url"` //头像
+	Level       int       `json:"level"db:"level"`
+	Experience  int       `json:"experience"db:"experience"`
 }
 
 type SkinListByUser struct {
@@ -32,4 +41,12 @@ type SkinListByUser struct {
 	SkinUrl     string `json:"skin_Url"db:"skin_url"`
 	Status      int    `json:"status"db:"status"`
 	SkinID      int    `json:"skin_id"db:"skin_id"`
+}
+
+type PostFromUser struct {
+	UserAddress string `json:"user_address"db:"author_address"`
+	UserName    string `json:"user_name"db:"user_name"`
+	PostID      int64  `json:"post_id"db:"post_id"`
+	Title       string `json:"title"db:"title"`
+	Content     string `json:"content"db:"content"`
 }

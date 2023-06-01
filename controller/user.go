@@ -124,3 +124,22 @@ func GetAllSkinByUserHandler(c *gin.Context) {
 	}
 	ResponseSuccess(c, data)
 }
+
+func GetPostFromUserAddHandler(c *gin.Context) {
+	_ = c.Param("user_address")
+	//
+	data := &models.PostFromUser{
+		UserAddress: "0xA7c2711DFE3B09Da2Ffce80E86ec0f18958AB151",
+		UserName:    "老庄",
+		Title:       "人工智能的概论讲解",
+		PostID:      1573247996923904,
+		Content:     "主贴内容，人工智能是一个好东西",
+	}
+	fmt.Println(*data)
+	ResponseSuccess(c, data)
+}
+
+//修改用户信息
+func ChangeUserInformationHandler(c *gin.Context) {
+
+}

@@ -112,7 +112,7 @@ func SubUserBalance(user_address string, amount int) (data *models.GetBalance, e
 //
 func GetUserInformation(user_address string) (data *models.UserInformation, err error) {
 	data = new(models.UserInformation)
-	sqlStr := `select user_address,user_name,balance,create_time from user where user_address=?`
+	sqlStr := `select user_address,user_name,balance,create_time,email,age,signature,gender,picture_url,experience,level from user where user_address=?`
 	err = Db.Get(data, sqlStr, user_address)
 	if err != nil {
 		return nil, err

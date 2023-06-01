@@ -48,9 +48,15 @@ func SetUpRouter(mode string) *gin.Engine {
 		v1.POST("post/:postID/response/", controller.CreateResponseHandler)
 		//查询用户信息
 		v1.GET("/user/:user_address/getuserInformation", controller.GetUserInformation)
-		//修改昵称
+
+		//查询用户发布的帖子
+		v1.GET("/user/:user_address/PostFromUser", controller.GetPostFromUserAddHandler)
+		//修改用户信息
+		v1.POST("user/:user_address/changeUserInformation", controller.ChangeUserInformationHandler)
+		//点赞的函数
 
 		//
+
 		//查询一个用户的余额
 		v1.GET("/user/:user_address/balance", controller.GetUserBalanceHandler)
 
