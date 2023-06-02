@@ -5,3 +5,10 @@ type ParamLogin struct {
 	Key         string `json:"key"binding:"required"`
 	UserAddress string `json:"user_address"binding:"required"`
 }
+
+//ResponseLogin
+type ResponseLogin struct {
+	HeadPicture string `json:"head_picture"db:"picture_url"`
+	UserName    string `json:"user_name"db:"user_name"`
+	UserAddress string `db:"user_address"`
+}

@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"database/sql"
+	"fmt"
 	"furumvv2/models"
 )
 
@@ -10,43 +11,51 @@ const secret = "forum-v2"
 func CheckUserExist(userAddress string) (bool bool, err error) {
 	sqlStr := "select count(*) from user where user_address=?"
 	var count int
+
 	if err := Db.Get(&count, sqlStr, userAddress); err != nil {
 		return false, err
 	}
+
 	if count > 0 { //已经注册 进数据库
-		return true, ErrorUserExist
+		return true, nil
 	}
 	//没有注册
 	return false, nil
 }
 
-func InsertUser(user *models.User) (err error) {
-	//对密码加密
-
+func InsertUser(user *models.User) (data *models.ResponseLogin, err error) {
+	data = new(models.ResponseLogin)
 	//执行SQL语句入库
-	sqlStr := "insert into user(user_address,user_name,balance) values(?,?,?)"
-	_, err = Db.Exec(sqlStr, user.UserAddress, user.UserName, user.Balance)
-	return
+	InsqlStr := "insert into user(user_address,user_name,balance,picture_url) values(?,?,?,?)"
+	SelectSql := `select user_name,picture_url,user_address from user where user_address = ?`
+	_, err = Db.Exec(InsqlStr, user.UserAddress, user.UserName, user.Balance, user.Picture)
+
+	err = Db.Get(data, SelectSql, user.UserAddress)
+	fmt.Println("2", err)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
 }
 
-func Login(user *models.User) (err error) {
-	getuser := new(models.User)
-	sqlStr := "select user_address,user_name from user where user_address=?"
-	err = Db.Get(getuser, sqlStr, user.UserAddress)
-
+func Login(user *models.User) (data *models.ResponseLogin, err error) {
+	data = new(models.ResponseLogin)
+	sqlStr := "select user_address,user_name,picture_url from user where user_address=?"
+	err = Db.Get(data, sqlStr, user.UserAddress)
+	fmt.Println(*data)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			//没有查询到
-			return ErrorUserNotExist
+			return nil, ErrorUserNotExist
 		}
 		//查询数据库失败
-		return err
+		return nil, err
 	}
 	//判断是否相等
-	if getuser.UserAddress != user.UserAddress {
-		return ErrorInvalidPassword
+	if data.UserAddress != user.UserAddress {
+		return nil, ErrorInvalidPassword
 	}
-	return nil
+	return data, nil
 }
 
 func GetUserBalance(user_address string) (data *models.GetBalance, err error) {
@@ -112,14 +121,24 @@ func SubUserBalance(user_address string, amount int) (data *models.GetBalance, e
 //
 func GetUserInformation(user_address string) (data *models.UserInformation, err error) {
 	data = new(models.UserInformation)
-	sqlStr := `select user_address,user_name,balance,create_time,email,age,signature,gender,picture_url,experience,level from user where user_address=?`
+	sqlStr := `select user_address,user_name,create_time,email,age,signature,gender,picture_url,experience,level 
+				from user where user_address=? `
 	err = Db.Get(data, sqlStr, user_address)
 	if err != nil {
 		return nil, err
 	}
 	return
 }
-
+func GetUserInformationInside(user_address string) (data *models.UserInformationInside, err error) {
+	data = new(models.UserInformationInside)
+	sqlStr := `select user_address,user_name,balance,create_time,email,age,signature,gender,picture_url,experience,level 
+				from user where user_address=? `
+	err = Db.Get(data, sqlStr, user_address)
+	if err != nil {
+		return nil, err
+	}
+	return
+}
 func GetAllSkinByUser(user_address string) (data []*models.SkinListByUser, err error) {
 	data = make([]*models.SkinListByUser, 0)
 	sqlStr := `select 
@@ -133,4 +152,13 @@ func GetAllSkinByUser(user_address string) (data []*models.SkinListByUser, err e
 		return nil, err
 	}
 	return
+}
+
+func ChangeUserInformation(update *models.UpdateProfile) (err error) {
+	sqlStr2 := "update user set user_name=?,email=?,gender=?,signature=?,picture_url=?,age=? where user_address=?"
+	_, err = Db.Exec(sqlStr2, update.Username, update.Email, update.Gender, update.Signature, update.HeadPicture, update.Age, update.UserAddress)
+	if err != nil {
+		return err
+	}
+	return nil
 }

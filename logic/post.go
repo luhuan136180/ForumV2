@@ -72,6 +72,11 @@ func GetPostByPostID(postid string) (data []*models.GetPost, err error) {
 	if err != nil {
 		return nil, err
 	}
+	for i, value := range data {
+		if i > 0 {
+			value.PictureURL = ""
+		}
+	}
 	return
 }
 func CreateResponseByPostID(post *models.CtreatePost) (data *models.CreateResponse, err error) {

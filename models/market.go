@@ -18,3 +18,8 @@ type Shop struct {
 	UserAddress string `json:"user_address"db:"user_address"`
 	Price       int    `json:"price"db:"price"`
 }
+type ShoppingInfo struct {
+	SkinID      int    `json:"skin_id"db:"skin_id"`
+	UserAddress string `json:"user_address"db:"user_address"`
+	Status      int    `json:"status"db:"status"`
+}

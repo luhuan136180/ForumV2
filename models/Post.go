@@ -43,11 +43,12 @@ type PostPicture struct {
 
 //获取主贴信息的结构体
 type GetPost struct {
-	Title      sql.NullString `json:"title"db:"title"`
-	Content    string         `json:"content"db:"content"binding:"required"`
-	AuthorName string         `json:"author_name"db:"user_name"binding:"required"`
-	PostID     int64          `json:"post_id"db:"post_id"`
-	PictureURL string         `json:"picture_url"db:"url"`
+	Title         sql.NullString `json:"title"db:"title"`
+	Content       string         `json:"content"db:"content"binding:"required"`
+	AuthorName    string         `json:"author_name"db:"user_name"binding:"required"`
+	PostID        int64          `json:"post_id"db:"post_id"`
+	PictureURL    string         `json:"picture_url"db:"url"`
+	AuthorAddress string         `json:"author_address"db:"user_address"`
 }
 
 //获取帖子的每一条内容的结构体

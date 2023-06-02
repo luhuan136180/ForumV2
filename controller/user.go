@@ -31,12 +31,12 @@ func LoginHandler(c *gin.Context) {
 		return
 	}
 	//
-	fmt.Println("userLogin", userLogin)
+	//fmt.Println("userLogin", userLogin)
 	user := new(models.User)
 	user.UserAddress = userLogin.UserAddress
-	fmt.Println("user", user)
+	//fmt.Println("user", user)
 	//业务处理
-	token, err := logic.Login(user)
+	data, err := logic.Login(user)
 	//fmt.Println(token)
 	if err != nil {
 		zap.L().Error("Logic.Login failed", zap.String("username", user.UserAddress), zap.Error(err))
@@ -52,7 +52,7 @@ func LoginHandler(c *gin.Context) {
 	}
 
 	//返回请求
-	ResponseSuccess(c, token)
+	ResponseSuccess(c, data)
 }
 
 func GetUserBalanceHandler(c *gin.Context) {
@@ -101,7 +101,7 @@ func SubBalanceHandler(c *gin.Context) {
 	ResponseSuccess(c, data)
 }
 
-//
+//获取用户信息
 func GetUserInformation(c *gin.Context) {
 	user_address := c.Param("user_address")
 	data, err := logic.GetUserInformation(user_address)
@@ -141,5 +141,22 @@ func GetPostFromUserAddHandler(c *gin.Context) {
 
 //修改用户信息
 func ChangeUserInformationHandler(c *gin.Context) {
-
+	userprofile := new(models.UserProfile)
+	if err := c.ShouldBindJSON(userprofile); err != nil {
+		zap.L().Error("Change	UserInformation is failed", zap.Error(err))
+		tanser, ok := err.(validator.ValidationErrors)
+		if !ok {
+			ResponseErrorWithMsg(c, CodeInvalidParam, err.Error())
+			return
+		}
+		ResponseErrorWithMsg(c, CodeInvalidParam, removeTopStruct(tanser.Translate(trans)))
+		return
+	}
+	//
+	if err := logic.ChangeUserInformation(userprofile); err != nil {
+		zap.L().Error("logic.ChangeUserInformation(p) failed", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+	ResponseSuccess(c, "success change")
 }

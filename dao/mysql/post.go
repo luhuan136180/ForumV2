@@ -73,9 +73,10 @@ func GetPostByTitleLIKE(word string) (data []*models.GetPost, err error) {
 }
 
 func GetPostByPostID(postid int64) (data []*models.GetPost, err error) {
-	sqlStr := `select title,content,user_name from post 
+	sqlStr := `select title,content,user_name,postpicture.url,user.user_address,post.post_id from post 
 			join user on user.user_address=post.author_address
-			where post_id = ? order by post.create_time;`
+      		join postpicture on postpicture.post_id=post.post_id 
+			where post.post_id = ? order by post.create_time`
 	data = make([]*models.GetPost, 0)
 	err = Db.Select(&data, sqlStr, postid)
 	if err != nil {

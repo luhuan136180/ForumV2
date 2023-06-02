@@ -68,3 +68,12 @@ func ShopSkinByUser(shopInforamtion *models.Shop) (err error) {
 	}
 	return nil
 }
+
+func ShoppingSkin(shoppingInfo *models.ShoppingInfo) (err error) {
+	sqlStr := `insert into user_skin(user_address,skin_id,status) values(?,?,?)`
+	_, err = Db.Exec(sqlStr, shoppingInfo.UserAddress, shoppingInfo.SkinID, shoppingInfo.Status)
+	if err != nil {
+		return err
+	}
+	return nil
+}

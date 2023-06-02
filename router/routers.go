@@ -19,7 +19,9 @@ func SetUpRouter(mode string) *gin.Engine {
 
 	//分组
 	v1 := r.Group("/api/v1") //组
+	//
 	v1.Use(middleWares.Proxy())
+
 	v1.GET("/helloworld", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "Hello world!",
@@ -51,7 +53,7 @@ func SetUpRouter(mode string) *gin.Engine {
 
 		//查询用户发布的帖子
 		v1.GET("/user/:user_address/PostFromUser", controller.GetPostFromUserAddHandler)
-		//修改用户信息
+		//修改用户信息--昵称，年龄，性别，邮箱，个性签名，头像
 		v1.POST("user/:user_address/changeUserInformation", controller.ChangeUserInformationHandler)
 		//点赞的函数
 
@@ -64,7 +66,7 @@ func SetUpRouter(mode string) *gin.Engine {
 		v1.POST("/user/:user_address/add_balance", controller.AddBalanceHandler)
 		////进行交易，改变用户余额--支出
 		v1.PUT("/user/:user_address/sub_amount", controller.SubBalanceHandler)
-		//
+
 		//上传文件？？---纯上传API
 		v1.POST("/file", controller.UploadFile)
 		//上传文件，同时记录上传用户等信息
@@ -75,7 +77,9 @@ func SetUpRouter(mode string) *gin.Engine {
 		//展示用户个人的所拥有皮肤
 		v1.GET("/user/:user_address/skinList", controller.GetAllSkinByUserHandler)
 		//买皮肤---此API废弃
-		v1.GET("market/skins/shop", controller.ShopSkinByUserHandler)
+		//v1.GET("market/skins/shop", controller.ShopSkinByUserHandler)
+		//购买皮肤
+		v1.POST("/market/skins/shop", controller.ShoppingSkinHandler)
 	}
 
 	return r

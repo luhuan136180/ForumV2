@@ -54,3 +54,24 @@ func ShopSkinByUserHandler(c *gin.Context) {
 	//
 	ResponseSuccess(c, shopInformation)
 }
+
+func ShoppingSkinHandler(c *gin.Context) {
+	ShoppingInfo := new(models.ShoppingInfo)
+	if err := c.ShouldBindJSON(ShoppingInfo); err != nil {
+		zap.L().Error("Shoping Skin by User_address is failed", zap.Error(err))
+		tanser, ok := err.(validator.ValidationErrors)
+		if !ok {
+			ResponseErrorWithMsg(c, CodeInvalidParam, err.Error())
+			return
+		}
+		ResponseErrorWithMsg(c, CodeInvalidParam, removeTopStruct(tanser.Translate(trans)))
+		return
+	}
+	err := logic.ShoppingSkin(ShoppingInfo)
+	if err != nil {
+		zap.L().Error("logic.ShoppingSkin(p) failed", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+	ResponseSuccess(c, "Shopping Success")
+}

@@ -30,3 +30,7 @@ func ShopSkinByUser(shopInformation *models.Shop) (err error) {
 	}
 	return nil
 }
+
+func ShoppingSkin(shoppingInfo *models.ShoppingInfo) (err error) {
+	return mysql.ShoppingSkin(shoppingInfo)
+}

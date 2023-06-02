@@ -91,6 +91,7 @@ func CreateResponseHandler(c *gin.Context) {
 	postID, _ := strconv.ParseInt(postid, 10, 64)
 	post.PostID = postID
 
+	fmt.Println("postResponse creeate:", post)
 	//
 	data, err := logic.CreateResponseByPostID(post)
 	if err != nil {
@@ -104,15 +105,16 @@ func CreateResponseHandler(c *gin.Context) {
 //查询单个帖子的所有内容
 func GetPostByPostID(c *gin.Context) {
 	postid := c.Param("postid")
+
 	data, err := logic.GetPostByPostID(postid)
 	if err != nil {
 		zap.L().Error("logic.GetPostByPostID(p) failed", zap.Error(err))
 		ResponseError(c, CodeServerBusy)
 		return
 	}
-	for _, val := range data {
-		fmt.Println(val)
-	}
+	//for _, val := range data {
+	//	fmt.Println(val)
+	//}
 
 	ResponseSuccess(c, data)
 }
