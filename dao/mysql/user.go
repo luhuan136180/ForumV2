@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"furumvv2/models"
+	"strings"
 )
 
 const secret = "forum-v2"
@@ -19,6 +20,7 @@ func CheckUserExist(userAddress string) (bool bool, err error) {
 	if count > 0 { //已经注册 进数据库
 		return true, nil
 	}
+
 	//没有注册
 	return false, nil
 }
@@ -51,6 +53,8 @@ func Login(user *models.User) (data *models.ResponseLogin, err error) {
 		//查询数据库失败
 		return nil, err
 	}
+	data.UserAddress = strings.ToLower(data.UserAddress)
+	user.UserAddress = strings.ToLower(user.UserAddress)
 	//判断是否相等
 	if data.UserAddress != user.UserAddress {
 		return nil, ErrorInvalidPassword
@@ -161,4 +165,17 @@ func ChangeUserInformation(update *models.UpdateProfile) (err error) {
 		return err
 	}
 	return nil
+}
+
+func GetPostFromUserAdd(user_address string) (data []*models.GetPost, err error) {
+	data = make([]*models.GetPost, 0)
+	sqlStr := `select title,content,user_name,post.post_id,postpicture.url from post 
+			join user on user.user_address=post.author_address 
+			join postpicture on postpicture.post_id = post.post_id
+			where user.user_address=? and status=1 ORDER BY post.id DESC;`
+	err = Db.Select(&data, sqlStr, user_address)
+	if err != nil {
+		return nil, err
+	}
+	return
 }

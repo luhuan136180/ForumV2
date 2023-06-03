@@ -41,24 +41,26 @@ func SetUpRouter(mode string) *gin.Engine {
 		//查询帖子  /post/list?page=x&size=y
 		v1.GET("/post/list", controller.GetPostsListHandler)
 		////查询一些帖子---模糊查询--对内容版本
-		v1.GET("post/like-content/:word", controller.GetPostByContentLIKEHandler)
+		v1.GET("/post/like-content/:word", controller.GetPostByContentLIKEHandler)
 		//查询一些帖子---模糊查询--对标题
-		v1.GET("post/like-title/:word", controller.GetPostByTitleLIKEHandler)
+		v1.GET("/post/like-title/:word", controller.GetPostByTitleLIKEHandler)
 		//查询整个帖子（主贴+回复）
 		v1.GET("/post/getpost/:postid", controller.GetPostByPostID)
 		//对帖子发表评论
 		v1.POST("post/:postID/response/", controller.CreateResponseHandler)
 		//查询用户信息
 		v1.GET("/user/:user_address/getuserInformation", controller.GetUserInformation)
+		//点赞的函数
+		//v1.POST("/post/:postID/givelike", controller.GiveLikeByPostIDHandler)
 
 		//查询用户发布的帖子
 		v1.GET("/user/:user_address/PostFromUser", controller.GetPostFromUserAddHandler)
 		//修改用户信息--昵称，年龄，性别，邮箱，个性签名，头像
-		v1.POST("user/:user_address/changeUserInformation", controller.ChangeUserInformationHandler)
-		//点赞的函数
-
-		//
-
+		v1.POST("/user/:user_address/changeUserInformation", controller.ChangeUserInformationHandler)
+		//关注的函数
+		v1.POST("/user/Following", controller.AddFollowerByUserIDHandler)
+		//查看关注列表的函数
+		v1.GET("/user/:user_address/followerList", controller.GetFollowerListHandler)
 		//查询一个用户的余额
 		v1.GET("/user/:user_address/balance", controller.GetUserBalanceHandler)
 

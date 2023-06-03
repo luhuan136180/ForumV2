@@ -17,6 +17,7 @@ const ( //摄制常量
 	CodeMysql
 	CodeISShopping
 	CodeNOAmount
+	CodeFollowerExit
 )
 
 //定义一个哈希表
@@ -31,9 +32,10 @@ var codeMsgMap = map[ResCode]string{
 	CodeNeedLogin:    "需要登录",
 	CodeInvalidToken: "无效的token",
 
-	CodeMysql:      "mysql数据库操作有误",
-	CodeISShopping: "该皮肤已经购买",
-	CodeNOAmount:   "余额不足",
+	CodeMysql:        "mysql数据库操作有误",
+	CodeISShopping:   "该皮肤已经购买",
+	CodeNOAmount:     "余额不足",
+	CodeFollowerExit: "已经关注该用户",
 }
 
 func (c ResCode) Msg() string {

@@ -74,14 +74,14 @@ type PostFromUser struct {
 
 //用户信息修改的josn收集结构体
 type UserProfile struct {
-	UserAddress string `json:"user_address"db:"user_address"`
+	UserAddress string `json:"user_address"db:"user_address"binding:"required"`
 	//昵称修改
-	UserName    string `json:"user_name"db:"user_name"`
-	Email       string `json:"email"db:"email"`
-	Age         string `json:"age"db:"age"`
-	Gender      string `json:"gender"db:"gender"`
-	Signature   string `json:"signature"db:"signature"`
-	HeadPicture string `json:"head_picture"db:"picture_url"`
+	UserName    string `json:"user_name"db:"user_name"binding:"required"`
+	Email       string `json:"email"db:"email"binding:"required"`
+	Age         string `json:"age"db:"age"binding:"required"`
+	Gender      string `json:"gender"db:"gender"binding:"required"`
+	Signature   string `json:"signature"db:"signature"binding:"required"`
+	HeadPicture string `json:"head_picture"db:"picture_url"binding:"required"`
 }
 
 // 定义更新数据的结构体类型

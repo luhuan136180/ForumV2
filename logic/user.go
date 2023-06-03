@@ -106,16 +106,24 @@ func ChangeUserInformation(userprofile *models.UserProfile) (err error) {
 	//判断是否有修改
 	if userInformation.UserName.String != userprofile.UserName {
 		updateProfile.Username = sql.NullString{String: userprofile.UserName, Valid: true}
+	} else {
+		updateProfile.Username = sql.NullString{String: userprofile.UserName, Valid: true}
 	}
 	if userInformation.Email.String != userprofile.Email {
+		updateProfile.Email = sql.NullString{String: userprofile.Email, Valid: true}
+	} else {
 		updateProfile.Email = sql.NullString{String: userprofile.Email, Valid: true}
 	}
 	ageprofile, err := strconv.Atoi(userprofile.Age)
 	ageInfo := int(userInformation.Age.Int64)
 	if ageInfo != ageprofile {
 		updateProfile.Age = sql.NullInt64{Int64: int64(ageprofile), Valid: true}
+	} else {
+		updateProfile.Age = sql.NullInt64{Int64: int64(ageprofile), Valid: true}
 	}
 	if userInformation.Signature.String != userprofile.Signature {
+		updateProfile.Signature = sql.NullString{String: userprofile.Signature, Valid: true}
+	} else {
 		updateProfile.Signature = sql.NullString{String: userprofile.Signature, Valid: true}
 	}
 	updateProfile.Gender = sql.NullString{String: userprofile.Gender, Valid: true}
@@ -128,4 +136,13 @@ func ChangeUserInformation(userprofile *models.UserProfile) (err error) {
 		return err
 	}
 	return nil
+}
+
+func GetPostFromUserAdd(user_address string) (data []*models.GetPost, err error) {
+	data, err = mysql.GetPostFromUserAdd(user_address)
+	//fmt.Println(data)
+	if err != nil {
+		return nil, err
+	}
+	return
 }

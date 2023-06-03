@@ -2,7 +2,6 @@ package controller
 
 import (
 	"errors"
-	"fmt"
 	"furumvv2/dao/mysql"
 	"furumvv2/logic"
 	"furumvv2/models"
@@ -16,12 +15,14 @@ import (
 //获取参数为一个签名和一个公钥地址
 func LoginHandler(c *gin.Context) {
 
-	//获取参数
+	//前端登录传递给后端的数据，获取参数
 	userLogin := new(models.Login)
 	//
 	//
+
 	if err := c.ShouldBindJSON(userLogin); err != nil {
 		zap.L().Error("Login with invalid param", zap.Error(err))
+
 		tanser, ok := err.(validator.ValidationErrors)
 		if !ok {
 			ResponseErrorWithMsg(c, CodeInvalidParam, err.Error())
@@ -32,6 +33,7 @@ func LoginHandler(c *gin.Context) {
 	}
 	//
 	//fmt.Println("userLogin", userLogin)
+	//后端存储到数据库中的一行数据对应的结构体
 	user := new(models.User)
 	user.UserAddress = userLogin.UserAddress
 	//fmt.Println("user", user)
@@ -126,16 +128,23 @@ func GetAllSkinByUserHandler(c *gin.Context) {
 }
 
 func GetPostFromUserAddHandler(c *gin.Context) {
-	_ = c.Param("user_address")
+	user_address := c.Param("user_address")
 	//
-	data := &models.PostFromUser{
-		UserAddress: "0xA7c2711DFE3B09Da2Ffce80E86ec0f18958AB151",
-		UserName:    "老庄",
-		Title:       "人工智能的概论讲解",
-		PostID:      1573247996923904,
-		Content:     "主贴内容，人工智能是一个好东西",
+	//data := &models.PostFromUser{
+	//	UserAddress: "0xA7c2711DFE3B09Da2Ffce80E86ec0f18958AB151",
+	//	UserName:    "老庄",
+	//	Title:       "人工智能的概论讲解",
+	//	PostID:      1573247996923904,
+	//	Content:     "主贴内容，人工智能是一个好东西",
+	//}
+	//fmt.Println(*data)
+	data, err := logic.GetPostFromUserAdd(user_address)
+	if err != nil {
+		zap.L().Error("logic.GetPostFromUserAdd(p) failed", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
 	}
-	fmt.Println(*data)
+	//
 	ResponseSuccess(c, data)
 }
 

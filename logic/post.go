@@ -36,6 +36,8 @@ func CreatePost(post *models.CtreatePost) (data *models.CreateResponse, err erro
 func encryptContent(value string) string {
 	data := []byte(value)
 	hash := sha512.Sum512(data)
+	//hash2 := sha256.Sum256(data)
+	//fmt.Println(hash2)
 	return hex.EncodeToString(hash[:])
 }
 
