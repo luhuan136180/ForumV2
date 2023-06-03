@@ -51,6 +51,14 @@ type GetPost struct {
 	AuthorAddress string         `json:"author_address"db:"user_address"`
 }
 
+type GetPostByList struct {
+	UserAddress string `json:"user_address"db:"user_address"`
+	UserName    string `json:"user_name"db:"user_name"`
+	Title       string `json:"title"db:"title"`
+	Content     string `json:"content"db:"content"`
+	PostID      int64  `json:"post_id"db:"post_id"`
+}
+
 //获取帖子的每一条内容的结构体
 type GetMessage struct {
 	Title         string `json:"title"db:"title"`

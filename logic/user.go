@@ -138,7 +138,7 @@ func ChangeUserInformation(userprofile *models.UserProfile) (err error) {
 	return nil
 }
 
-func GetPostFromUserAdd(user_address string) (data []*models.GetPost, err error) {
+func GetPostFromUserAdd(user_address string) (data []*models.GetPostByList, err error) {
 	data, err = mysql.GetPostFromUserAdd(user_address)
 	//fmt.Println(data)
 	if err != nil {

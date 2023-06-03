@@ -2,6 +2,7 @@ package controller
 
 import (
 	"errors"
+	"fmt"
 	"furumvv2/dao/mysql"
 	"furumvv2/logic"
 	"furumvv2/models"
@@ -161,6 +162,8 @@ func ChangeUserInformationHandler(c *gin.Context) {
 		ResponseErrorWithMsg(c, CodeInvalidParam, removeTopStruct(tanser.Translate(trans)))
 		return
 	}
+	//
+	fmt.Println("userprofile:", &userprofile)
 	//
 	if err := logic.ChangeUserInformation(userprofile); err != nil {
 		zap.L().Error("logic.ChangeUserInformation(p) failed", zap.Error(err))

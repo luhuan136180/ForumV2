@@ -167,9 +167,9 @@ func ChangeUserInformation(update *models.UpdateProfile) (err error) {
 	return nil
 }
 
-func GetPostFromUserAdd(user_address string) (data []*models.GetPost, err error) {
-	data = make([]*models.GetPost, 0)
-	sqlStr := `select title,content,user_name,post.post_id,postpicture.url from post 
+func GetPostFromUserAdd(user_address string) (data []*models.GetPostByList, err error) {
+	data = make([]*models.GetPostByList, 0)
+	sqlStr := `select title,content,user_name,post.post_id,user.user_address from post 
 			join user on user.user_address=post.author_address 
 			join postpicture on postpicture.post_id = post.post_id
 			where user.user_address=? and status=1 ORDER BY post.id DESC;`
