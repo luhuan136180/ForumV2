@@ -140,13 +140,15 @@ func GetPostFromUserAddHandler(c *gin.Context) {
 	//}
 	//fmt.Println(*data)
 	data, err := logic.GetPostFromUserAdd(user_address)
+	num := len(data)
 	if err != nil {
 		zap.L().Error("logic.GetPostFromUserAdd(p) failed", zap.Error(err))
 		ResponseError(c, CodeServerBusy)
 		return
 	}
+
 	//
-	ResponseSuccess(c, data)
+	ResponseSuccessGetPost(c, data, num)
 }
 
 //修改用户信息

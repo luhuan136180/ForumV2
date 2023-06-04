@@ -34,6 +34,7 @@ type CtreatePost struct {
 type CreateResponse struct {
 	Title   string `json:"title"`
 	PostKey string `json:"post_key"`
+	PostID  int    `json:"post_id"`
 }
 
 type PostPicture struct {
@@ -56,7 +57,9 @@ type GetPostByList struct {
 	UserName    string `json:"user_name"db:"user_name"`
 	Title       string `json:"title"db:"title"`
 	Content     string `json:"content"db:"content"`
+	HeadPicture string `json:"picture_url"db:"url"`
 	PostID      int64  `json:"post_id"db:"post_id"`
+	PostKey     string `json:"post_key"db:"post_key"`
 }
 
 //获取帖子的每一条内容的结构体

@@ -11,6 +11,13 @@ type ResponseData struct {
 	Msg  interface{} `json:"msg"`
 	Data interface{} `json:"data,omitempty"` //omitempty :当字段没有值时忽略，不显示
 }
+type ResponseDataGetPost struct {
+	Code ResCode     `json:"code"`
+	Msg  interface{} `json:"msg"`
+	Num  int         `json:"num"`
+	Data interface{} `json:"data,omitempty"` //omitempty :当字段没有值时忽略，不显示
+
+}
 
 //返回响应-错误
 func ResponseError(c *gin.Context, code ResCode) {
@@ -36,5 +43,14 @@ func ResponseSuccess(c *gin.Context, data interface{}) {
 		Code: CodeSuccess,
 		Msg:  CodeSuccess.Msg(),
 		Data: data,
+	})
+}
+
+func ResponseSuccessGetPost(c *gin.Context, data interface{}, num int) {
+	c.JSON(http.StatusOK, &ResponseDataGetPost{
+		Code: CodeSuccess,
+		Msg:  CodeSuccess.Msg(),
+		Data: data,
+		Num:  num,
 	})
 }

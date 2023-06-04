@@ -24,6 +24,7 @@ func Login(user *models.User) (data *models.ResponseLogin, err error) {
 		if data, err = SignUp(user); err != nil {
 			return nil, err
 		}
+
 		//注册成功，返回token
 		return data, nil
 	}
@@ -41,7 +42,9 @@ func SignUp(user *models.User) (data *models.ResponseLogin, err error) {
 	user.UserName = "默认用户" + user.UserAddress[:6]
 	user.Balance = 0
 	user.Picture = "https://img1.baidu.com/it/u=1888856496,845797841&fm=253&fmt=auto&app=138&f=PNG?w=500&h=500"
-	return mysql.InsertUser(user)
+	data, err = mysql.InsertUser(user)
+	data.HeadPicture = "https://img1.baidu.com/it/u=1888856496,845797841&fm=253&fmt=auto&app=138&f=PNG?w=500&h=500"
+	return
 }
 
 func GetUserBalance(user_address string) (data *models.GetBalance, err error) {
@@ -129,8 +132,11 @@ func ChangeUserInformation(userprofile *models.UserProfile) (err error) {
 	updateProfile.Gender = sql.NullString{String: userprofile.Gender, Valid: true}
 	updateProfile.HeadPicture = sql.NullString{String: userprofile.HeadPicture, Valid: true}
 	updateProfile.UserAddress = userprofile.UserAddress
+
+	updateProfile.BackGroundPicture = sql.NullString{String: userprofile.BackGroundPciture, Valid: true}
 	//开始修改
 	fmt.Println("updateProfile:", updateProfile)
+
 	if err = mysql.ChangeUserInformation(updateProfile); err != nil {
 		fmt.Println(err)
 		return err

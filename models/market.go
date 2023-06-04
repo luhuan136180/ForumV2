@@ -10,6 +10,7 @@ type Skin struct {
 	CreateTime time.Time `json:"createTime"db:"create_time"`
 	Status     int       `json:"status"db:"status"`
 	Price      int       `json:"price"db:"price"`
+	SkinAdd    string    `json:"skin_address"db:"skin_address"`
 }
 
 type Shop struct {
@@ -22,4 +23,15 @@ type ShoppingInfo struct {
 	SkinID      int    `json:"skin_id"db:"skin_id"`
 	UserAddress string `json:"user_address"db:"user_address"`
 	Status      int    `json:"status"db:"status"`
+	SkinURL     string `json:"skin_Url"db:"skin_url"`
+	Price       int    `json:"price"`
+	SkinAdd     string `json:"skin_address"db:"skin_address"`
 }
+
+//type AddSkin struct {
+//	SkinID     int       `json:"skin_id"db:"skin_id"`
+//	SkinUrl    string    `json:"skin_Url"db:"skin_url"`
+//	Price      int       `json:"price"db:"price"`
+//	SkinAdd    string    `json:"skin_address"db:"skin_address"`
+//	Status     int       `json:"status"db:"status"`
+//}

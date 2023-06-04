@@ -61,6 +61,7 @@ type SkinListByUser struct {
 	SkinUrl     string `json:"skin_Url"db:"skin_url"`
 	Status      int    `json:"status"db:"status"`
 	SkinID      int    `json:"skin_id"db:"skin_id"`
+	SkinAdd     string `json:"skin_address"db:"skin_address"`
 }
 
 //显示用户发表的帖子集合
@@ -76,21 +77,23 @@ type PostFromUser struct {
 type UserProfile struct {
 	UserAddress string `json:"user_address"db:"user_address"`
 	//昵称修改
-	UserName    string `json:"user_name"db:"user_name"`
-	Email       string `json:"email"db:"email"`
-	Age         string `json:"age"db:"age"`
-	Gender      string `json:"gender"db:"gender"`
-	Signature   string `json:"signature"db:"signature"`
-	HeadPicture string `json:"head_picture"db:"picture_url"`
+	UserName          string `json:"user_name"db:"user_name"`
+	Email             string `json:"email"db:"email"`
+	Age               string `json:"age"db:"age"`
+	Gender            string `json:"gender"db:"gender"`
+	Signature         string `json:"signature"db:"signature"`
+	HeadPicture       string `json:"head_picture"db:"picture_url"`
+	BackGroundPciture string `json:"bcg_url"db:"background_url"`
 }
 
 // 定义更新数据的结构体类型
 type UpdateProfile struct {
-	UserAddress string         `db:"user_address"`
-	Username    sql.NullString `db:"user_name"`
-	Email       sql.NullString `db:"email"`
-	Gender      sql.NullString `db:"gender"`
-	Signature   sql.NullString `db:"signature"`
-	HeadPicture sql.NullString `json:"head_picture"db:"picture_url"`
-	Age         sql.NullInt64  `db:"age"`
+	UserAddress       string         `db:"user_address"`
+	Username          sql.NullString `db:"user_name"`
+	Email             sql.NullString `db:"email"`
+	Gender            sql.NullString `db:"gender"`
+	Signature         sql.NullString `db:"signature"`
+	HeadPicture       sql.NullString `json:"head_picture"db:"picture_url"`
+	Age               sql.NullInt64  `db:"age"`
+	BackGroundPicture sql.NullString `db:"background_url"`
 }

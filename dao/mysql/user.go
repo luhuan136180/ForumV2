@@ -42,7 +42,7 @@ func InsertUser(user *models.User) (data *models.ResponseLogin, err error) {
 
 func Login(user *models.User) (data *models.ResponseLogin, err error) {
 	data = new(models.ResponseLogin)
-	sqlStr := "select user_address,user_name,picture_url from user where user_address=?"
+	sqlStr := "select user_address,user_name,picture_url,background_url from user where user_address=?"
 	err = Db.Get(data, sqlStr, user.UserAddress)
 	fmt.Println(*data)
 	if err != nil {
@@ -146,7 +146,7 @@ func GetUserInformationInside(user_address string) (data *models.UserInformation
 func GetAllSkinByUser(user_address string) (data []*models.SkinListByUser, err error) {
 	data = make([]*models.SkinListByUser, 0)
 	sqlStr := `select 
-		u.user_address,s.skin_url,s.status,s.skin_id
+		u.user_address,s.skin_url,s.status,s.skin_id,s.skin_address
 		from skin as s 
 		join user_skin as u
 		on s.skin_id=u.skin_id
@@ -159,8 +159,8 @@ func GetAllSkinByUser(user_address string) (data []*models.SkinListByUser, err e
 }
 
 func ChangeUserInformation(update *models.UpdateProfile) (err error) {
-	sqlStr2 := "update user set user_name=?,email=?,gender=?,signature=?,picture_url=?,age=? where user_address=?"
-	_, err = Db.Exec(sqlStr2, update.Username, update.Email, update.Gender, update.Signature, update.HeadPicture, update.Age, update.UserAddress)
+	sqlStr2 := "update user set user_name=?,email=?,gender=?,signature=?,picture_url=?,age=?,background_url=? where user_address=?"
+	_, err = Db.Exec(sqlStr2, update.Username, update.Email, update.Gender, update.Signature, update.HeadPicture, update.Age, update.BackGroundPicture, update.UserAddress)
 	if err != nil {
 		return err
 	}
@@ -169,7 +169,7 @@ func ChangeUserInformation(update *models.UpdateProfile) (err error) {
 
 func GetPostFromUserAdd(user_address string) (data []*models.GetPostByList, err error) {
 	data = make([]*models.GetPostByList, 0)
-	sqlStr := `select title,content,user_name,post.post_id,user.user_address from post 
+	sqlStr := `select title,content,user_name,post.post_id,user.user_address,postpicture.url,post.post_key from post 
 			join user on user.user_address=post.author_address 
 			join postpicture on postpicture.post_id = post.post_id
 			where user.user_address=? and status=1 ORDER BY post.id DESC;`

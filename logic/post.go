@@ -1,8 +1,7 @@
 package logic
 
 import (
-	"crypto/sha512"
-	"encoding/hex"
+	"crypto/sha256"
 	"fmt"
 	"furumvv2/dao/mysql"
 	"furumvv2/models"
@@ -30,15 +29,18 @@ func CreatePost(post *models.CtreatePost) (data *models.CreateResponse, err erro
 	}
 	data.Title = post.Title
 	data.PostKey = hash
+	data.PostID = int(post.PostID)
 	return
 }
 
 func encryptContent(value string) string {
 	data := []byte(value)
-	hash := sha512.Sum512(data)
-	//hash2 := sha256.Sum256(data)
-	//fmt.Println(hash2)
-	return hex.EncodeToString(hash[:])
+	//hash := sha512.Sum512(data)
+	hash2 := sha256.Sum256(data)
+
+	hex := fmt.Sprintf("%x", hash2)
+	hex = "0x" + hex
+	return hex
 }
 
 func GetPostsList(page, size int64) (data []*models.GetPost, err error) {

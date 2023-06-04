@@ -4,6 +4,7 @@ import (
 	"furumvv2/controller"
 	"furumvv2/logger"
 	middleWares "furumvv2/middlerWares"
+	"furumvv2/pkg/snowflake"
 	"github.com/gin-gonic/gin"
 )
 
@@ -82,7 +83,14 @@ func SetUpRouter(mode string) *gin.Engine {
 		//v1.GET("market/skins/shop", controller.ShopSkinByUserHandler)
 		//购买皮肤
 		v1.POST("/market/skins/shop", controller.ShoppingSkinHandler)
+		//
+		//v1.POST("/market/skins/add",controller.AddSkinsHandler)
+		v1.GET("/get/id/test", func(c *gin.Context) {
+			id := snowflake.GenID()
+			c.JSON(200, gin.H{
+				"id": id,
+			})
+		})
 	}
-
 	return r
 }

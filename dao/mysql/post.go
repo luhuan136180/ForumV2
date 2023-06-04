@@ -46,7 +46,7 @@ func GetPictureList(postIDlist []int64) (data []*models.PostPicture, err error) 
 
 func GetPostByContentLIKE(word string) (data []*models.GetPost, err error) {
 	keyword := "%" + word + "%"
-	sqlStr := `select title,content,user_name,post.post_id,postpicture.url from post 
+	sqlStr := `select title,content,user_name,post.post_id,postpicture.url,user.user_address from post 
 			join user on user.user_address=post.author_address 
 			join postpicture on postpicture.post_id = post.post_id
 			where post.content LIKE ? and status=1 ORDER BY post.id DESC;`

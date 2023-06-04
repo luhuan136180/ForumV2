@@ -2,6 +2,7 @@ package controller
 
 import (
 	"errors"
+	"fmt"
 	"furumvv2/dao/mysql"
 	"furumvv2/logic"
 	"furumvv2/models"
@@ -67,6 +68,7 @@ func ShoppingSkinHandler(c *gin.Context) {
 		ResponseErrorWithMsg(c, CodeInvalidParam, removeTopStruct(tanser.Translate(trans)))
 		return
 	}
+	fmt.Println("ShoppingInfo:", *ShoppingInfo)
 	err := logic.ShoppingSkin(ShoppingInfo)
 	if err != nil {
 		zap.L().Error("logic.ShoppingSkin(p) failed", zap.Error(err))
@@ -75,3 +77,22 @@ func ShoppingSkinHandler(c *gin.Context) {
 	}
 	ResponseSuccess(c, "Shopping Success")
 }
+
+//func AddSkinsHandler(c *gin.Context) {
+//	AddInfo:=new(models.AddSkin)
+//	if err:=c.ShouldBindJSON(AddInfo);err!=nil{
+//		zap.L().Error("ADD Skin by Skin_address is failed", zap.Error(err))
+//		tanser, ok := err.(validator.ValidationErrors)
+//		if !ok {
+//			ResponseErrorWithMsg(c, CodeInvalidParam, err.Error())
+//			return
+//		}
+//		ResponseErrorWithMsg(c, CodeInvalidParam, removeTopStruct(tanser.Translate(trans)))
+//		return
+//	}
+//
+//	if err:=logic.AddSkin(AddInfo);err!=nil{
+//
+//	}
+//
+//}

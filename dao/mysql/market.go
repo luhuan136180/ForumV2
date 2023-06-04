@@ -6,7 +6,7 @@ import (
 
 func GetAllSkinList(status int) (data []*models.Skin, err error) {
 	data = make([]*models.Skin, 0)
-	sqlStr := `select skin_id,skin_url,create_time,status,price from skin where status=?`
+	sqlStr := `select skin_id,skin_url,create_time,status,price,skin_address from skin where status=?`
 	err = Db.Select(&data, sqlStr, status)
 	if err != nil {
 		return nil, err
@@ -71,6 +71,7 @@ func ShopSkinByUser(shopInforamtion *models.Shop) (err error) {
 
 func ShoppingSkin(shoppingInfo *models.ShoppingInfo) (err error) {
 	sqlStr := `insert into user_skin(user_address,skin_id,status) values(?,?,?)`
+
 	_, err = Db.Exec(sqlStr, shoppingInfo.UserAddress, shoppingInfo.SkinID, shoppingInfo.Status)
 	if err != nil {
 		return err

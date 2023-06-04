@@ -61,6 +61,7 @@ func GetPostByContentLIKEHandler(c *gin.Context) {
 		ResponseError(c, CodeServerBusy)
 		return
 	}
+	fmt.Println("data:===", word)
 	ResponseSuccess(c, data)
 }
 
