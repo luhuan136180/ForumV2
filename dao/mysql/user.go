@@ -135,7 +135,7 @@ func GetUserInformation(user_address string) (data *models.UserInformation, err 
 }
 func GetUserInformationInside(user_address string) (data *models.UserInformationInside, err error) {
 	data = new(models.UserInformationInside)
-	sqlStr := `select user_address,user_name,balance,create_time,email,age,signature,gender,picture_url,experience,level 
+	sqlStr := `select user_address,user_name,balance,create_time,email,age,signature,gender,picture_url,experience,background_url ,level 
 				from user where user_address=? `
 	err = Db.Get(data, sqlStr, user_address)
 	if err != nil {
@@ -174,6 +174,78 @@ func GetPostFromUserAdd(user_address string) (data []*models.GetPostByList, err 
 			join postpicture on postpicture.post_id = post.post_id
 			where user.user_address=? and status=1 ORDER BY post.id DESC;`
 	err = Db.Select(&data, sqlStr, user_address)
+	if err != nil {
+		return nil, err
+	}
+	return
+}
+
+func EXitISBuyingBCG(userprofile *models.ChangeBCGByUser) (flag bool, err error) {
+	sqlStr := `select count(*)  from skin 
+	join user_skin on skin.skin_id = user_skin.skin_id
+	where skin.skin_url = ? and user_skin.user_address=?`
+
+	var count int
+
+	err = Db.Get(&count, sqlStr, userprofile.BCGUrl, userprofile.UserAddress)
+	if err != nil {
+		return false, err
+	}
+
+	if count > 0 {
+		return true, nil
+	}
+	return false, nil
+}
+
+func EXitISBuyingPH(userprofile *models.ChangeHPByUser) (flag bool, err error) {
+	sqlStr := `select count(*)  from skin 
+	join user_skin on skin.skin_id = user_skin.skin_id
+	where skin.skin_url = ? and user_skin.user_address=?`
+
+	var count int
+
+	err = Db.Get(&count, sqlStr, userprofile.HPurl, userprofile.UserAddress)
+	if err != nil {
+		return false, err
+	}
+
+	if count > 0 {
+		return true, nil
+	}
+	return false, nil
+}
+
+func ChangeUserBackGround(userprofile *models.ChangeBCGByUser) (data *models.UserInformationInside, err error) {
+	updateStr := `update user set background_url=? where user_address=?`
+	_, err = Db.Exec(updateStr, userprofile.BCGUrl, userprofile.UserAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	//以下是，替换之后返回一次完整用户信息
+	data = new(models.UserInformationInside)
+	sqlStr := `select user_address,user_name,balance,create_time,email,age,signature,gender,picture_url,experience,background_url ,level 
+				from user where user_address=? `
+	err = Db.Get(data, sqlStr, userprofile.UserAddress)
+	if err != nil {
+		return nil, err
+	}
+	return
+}
+
+func ChangeUserPH(userprofile *models.ChangeHPByUser) (data *models.UserInformationInside, err error) {
+	updateStr := `update user set picture_url=? where user_address=?`
+	_, err = Db.Exec(updateStr, userprofile.HPurl, userprofile.UserAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	//以下是，替换之后返回一次完整用户信息
+	data = new(models.UserInformationInside)
+	sqlStr := `select user_address,user_name,balance,create_time,email,age,signature,gender,picture_url,experience,background_url ,level 
+				from user where user_address=? `
+	err = Db.Get(data, sqlStr, userprofile.UserAddress)
 	if err != nil {
 		return nil, err
 	}

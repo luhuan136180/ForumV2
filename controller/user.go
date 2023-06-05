@@ -53,9 +53,21 @@ func LoginHandler(c *gin.Context) {
 		ResponseErrorWithMsg(c, CodeMysql, err.Error())
 		return
 	}
-
+	response := new(models.ResponseLoginData)
+	if data.BackGroundPic.Valid {
+		response.BackGroundPic = data.BackGroundPic.String
+		response.UserAddress = data.UserAddress
+		response.HeadPicture = data.HeadPicture
+		response.UserName = data.UserName
+	} else {
+		response.UserAddress = data.UserAddress
+		response.HeadPicture = data.HeadPicture
+		response.UserName = data.UserName
+		response.BackGroundPic = ""
+	}
+	fmt.Println("response", response)
 	//返回请求
-	ResponseSuccess(c, data)
+	ResponseSuccess(c, response)
 }
 
 func GetUserBalanceHandler(c *gin.Context) {
@@ -172,5 +184,66 @@ func ChangeUserInformationHandler(c *gin.Context) {
 		ResponseError(c, CodeServerBusy)
 		return
 	}
+
 	ResponseSuccess(c, "success change")
+}
+
+//修改用户的背景---用户和ksin——id的对应是在购买函数
+func ChangeUserBackGroundHandler(c *gin.Context) {
+
+	changeinfo := new(models.ChangeBCGByUser)
+	if err := c.ShouldBindJSON(changeinfo); err != nil {
+		zap.L().Error("Change	UserBackGround is failed", zap.Error(err))
+		tanser, ok := err.(validator.ValidationErrors)
+		if !ok {
+			ResponseErrorWithMsg(c, CodeInvalidParam, err.Error())
+			return
+		}
+		ResponseErrorWithMsg(c, CodeInvalidParam, removeTopStruct(tanser.Translate(trans)))
+		return
+	}
+
+	data, err := logic.ChangeUserBackGround(changeinfo)
+	if err != nil {
+		zap.L().Error("logic.ChangeUserBackGround is failed", zap.Error(err))
+		if err == logic.CodeURLNOTEXIT {
+			fmt.Println("change..err:没有购买，拿不到")
+			ResponseErrorWithMsg(c, CodeInvalidParam, err.Error())
+			return
+		}
+		ResponseErrorWithMsg(c, CodeInvalidParam, err.Error())
+		return
+	}
+	fmt.Println("data:", data)
+	ResponseSuccess(c, data)
+
+}
+
+func ChangeUserPHHandler(c *gin.Context) {
+	changeinfo := new(models.ChangeHPByUser)
+	if err := c.ShouldBindJSON(changeinfo); err != nil {
+		zap.L().Error("Change	UserBackGround is failed", zap.Error(err))
+		tanser, ok := err.(validator.ValidationErrors)
+		if !ok {
+			ResponseErrorWithMsg(c, CodeInvalidParam, err.Error())
+			return
+		}
+		ResponseErrorWithMsg(c, CodeInvalidParam, removeTopStruct(tanser.Translate(trans)))
+		return
+	}
+	fmt.Println("changeinfo", changeinfo)
+	//
+	data, err := logic.ChangeUserPH(changeinfo)
+	if err != nil {
+		zap.L().Error("logic.ChangeUserBackGround is failed", zap.Error(err))
+		if err == logic.CodeURLNOTEXIT {
+			fmt.Println("change..err:没有购买，拿不到")
+			ResponseErrorWithMsg(c, CodeInvalidParam, err.Error())
+			return
+		}
+		ResponseErrorWithMsg(c, CodeInvalidParam, err.Error())
+		return
+	}
+	fmt.Println("data:", data)
+	ResponseSuccess(c, data)
 }

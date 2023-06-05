@@ -58,6 +58,12 @@ func SetUpRouter(mode string) *gin.Engine {
 		v1.GET("/user/:user_address/PostFromUser", controller.GetPostFromUserAddHandler)
 		//修改用户信息--昵称，年龄，性别，邮箱，个性签名，头像
 		v1.POST("/user/:user_address/changeUserInformation", controller.ChangeUserInformationHandler)
+
+		//修改背景
+		v1.POST("/user/:user_address/changeBCG", controller.ChangeUserBackGroundHandler)
+		//修改头像
+		v1.POST("/user/:user_address/changeHP", controller.ChangeUserPHHandler)
+
 		//关注的函数
 		v1.POST("/user/Following", controller.AddFollowerByUserIDHandler)
 		//查看关注列表的函数

@@ -29,16 +29,17 @@ type Login struct {
 
 //用户信息显示结构体
 type UserInformation struct {
-	UserAddress string    `json:"user_address"db:"user_address"`
-	UserName    string    `json:"user_name"db:"user_name"`
-	CreateTime  time.Time `json:"create_time"db:"create_time"`
-	Age         int       `json:"age"db:"age"`
-	Email       string    `json:"eamil"db:"email"`
-	Gender      string    `json:"gender"db:"gender"` //0:男 ；1：女
-	Signature   string    `json:"signature"db:"signature"`
-	HeadPicture string    `json:"head_picture"db:"picture_url"` //头像
-	Level       int       `json:"level"db:"level"`
-	Experience  int       `json:"experience"db:"experience"`
+	UserAddress   string    `json:"user_address"db:"user_address"`
+	UserName      string    `json:"user_name"db:"user_name"`
+	CreateTime    time.Time `json:"create_time"db:"create_time"`
+	Age           int       `json:"age"db:"age"`
+	Email         string    `json:"eamil"db:"email"`
+	Gender        string    `json:"gender"db:"gender"` //0:男 ；1：女
+	Signature     string    `json:"signature"db:"signature"`
+	HeadPicture   string    `json:"head_picture"db:"picture_url"` //头像
+	Level         int       `json:"level"db:"level"`
+	Experience    int       `json:"experience"db:"experience"`
+	BackGroundPic string    `json:"bcg_url"db:"background_url"`
 }
 
 type UserInformationInside struct {
@@ -53,6 +54,7 @@ type UserInformationInside struct {
 	HeadPicture sql.NullString `json:"head_picture"db:"picture_url"` //头像
 	Level       sql.NullInt64  `json:"level"db:"level"`
 	Experience  sql.NullInt64  `json:"experience"db:"experience"`
+	BCGUrl      sql.NullString `json:"bcg_url"db:"background_url"`
 }
 
 //展示用户拥有的皮肤结构体
@@ -96,4 +98,15 @@ type UpdateProfile struct {
 	HeadPicture       sql.NullString `json:"head_picture"db:"picture_url"`
 	Age               sql.NullInt64  `db:"age"`
 	BackGroundPicture sql.NullString `db:"background_url"`
+}
+
+//获取修改背景的信息
+type ChangeBCGByUser struct {
+	UserAddress string `json:"user_address"db:"user_address"`
+	BCGUrl      string `json:"url"db:"background_url"`
+}
+
+type ChangeHPByUser struct {
+	UserAddress string `json:"user_address"db:"user_address"`
+	HPurl       string `json:"url"db:"picture_url"`
 }

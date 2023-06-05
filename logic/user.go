@@ -2,11 +2,14 @@ package logic
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"furumvv2/dao/mysql"
 	"furumvv2/models"
 	"strconv"
 )
+
+var CodeURLNOTEXIT = errors.New("没有购买")
 
 func Login(user *models.User) (data *models.ResponseLogin, err error) {
 	//对数据进行检验
@@ -93,6 +96,13 @@ func GetUserInformation(user_address string) (data *models.UserInformation, err 
 	}
 	data.CreateTime = userInfoInside.CreateTime
 
+	//
+	if userInfoInside.BCGUrl.Valid {
+		data.BackGroundPic = userInfoInside.BCGUrl.String
+	}
+
+	//
+
 	return data, nil
 }
 
@@ -150,5 +160,80 @@ func GetPostFromUserAdd(user_address string) (data []*models.GetPostByList, err 
 	if err != nil {
 		return nil, err
 	}
+	return
+}
+
+func changeStruct(userInfoInside *models.UserInformationInside) (data *models.UserInformation) {
+	data = new(models.UserInformation)
+
+	if userInfoInside.UserAddress.Valid {
+		data.UserAddress = userInfoInside.UserAddress.String
+	}
+	if userInfoInside.UserName.Valid {
+		data.UserName = userInfoInside.UserName.String
+	}
+	if userInfoInside.Age.Valid {
+		data.Age = int(userInfoInside.Age.Int64)
+	}
+	if userInfoInside.Gender.Valid {
+		data.Gender = userInfoInside.Gender.String
+	}
+	if userInfoInside.HeadPicture.Valid {
+		data.HeadPicture = userInfoInside.HeadPicture.String
+	}
+	if userInfoInside.Signature.Valid {
+		data.Signature = userInfoInside.Signature.String
+	}
+	if userInfoInside.Email.Valid {
+		data.Email = userInfoInside.Email.String
+	}
+	if userInfoInside.Level.Valid {
+		data.Level = int(userInfoInside.Level.Int64)
+	}
+	data.CreateTime = userInfoInside.CreateTime
+
+	//
+	if userInfoInside.BCGUrl.Valid {
+		data.BackGroundPic = userInfoInside.BCGUrl.String
+	}
+	return
+}
+
+func ChangeUserBackGround(userprofile *models.ChangeBCGByUser) (responsedata *models.UserInformation, err error) {
+	flag, err := mysql.EXitISBuyingBCG(userprofile)
+	if err != nil {
+		return nil, err
+	}
+	if flag == false {
+
+		return nil, CodeURLNOTEXIT
+	}
+	//数据库中能查到数据，已经购买---可以替换
+	data, err := mysql.ChangeUserBackGround(userprofile)
+	if err != nil {
+		return nil, err
+	}
+
+	responsedata = changeStruct(data)
+	return
+}
+
+func ChangeUserPH(userprofile *models.ChangeHPByUser) (responsedata *models.UserInformation, err error) {
+	flag, err := mysql.EXitISBuyingPH(userprofile)
+	if err != nil {
+		return nil, err
+	}
+	if flag == false {
+
+		return nil, CodeURLNOTEXIT
+	}
+
+	//
+	data, err := mysql.ChangeUserPH(userprofile)
+	if err != nil {
+		return nil, err
+	}
+
+	responsedata = changeStruct(data)
 	return
 }
