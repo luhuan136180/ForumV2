@@ -36,7 +36,9 @@ func Login(user *models.User) (data *models.ResponseLogin, err error) {
 	if data, err = mysql.Login(user); err != nil {
 		return nil, err
 	}
-
+	if data.HeadPicture == "" {
+		data.HeadPicture = "https://img1.baidu.com/it/u=1888856496,845797841&fm=253&fmt=auto&app=138&f=PNG?w=500&h=500"
+	}
 	return data, nil
 }
 

@@ -24,7 +24,7 @@ type ShoppingInfo struct {
 	UserAddress string `json:"user_address"db:"user_address"`
 	Status      int    `json:"status"db:"status"`
 	SkinURL     string `json:"skin_Url"db:"skin_url"`
-	Price       int    `json:"price"`
+	Price       string `json:"price"`
 	SkinAdd     string `json:"skin_address"db:"skin_address"`
 }
 

@@ -1,11 +1,14 @@
 package controller
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"furumvv2/dao/mysql"
 	"furumvv2/logic"
 	"furumvv2/models"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"go.uber.org/zap"
@@ -32,6 +35,12 @@ func LoginHandler(c *gin.Context) {
 		ResponseErrorWithMsg(c, CodeInvalidParam, removeTopStruct(tanser.Translate(trans)))
 		return
 	}
+	//
+	fmt.Println("userLogin.UserAddress:", userLogin.UserAddress)
+	fmt.Println("userLogin.Signiture::", userLogin.Key)
+	fmt.Println("userLogin.time:", userLogin.Time)
+	//
+
 	//
 	//fmt.Println("userLogin", userLogin)
 	//后端存储到数据库中的一行数据对应的结构体
@@ -68,6 +77,26 @@ func LoginHandler(c *gin.Context) {
 	fmt.Println("response", response)
 	//返回请求
 	ResponseSuccess(c, response)
+}
+
+//登录验证
+func VerifySignature(signature []byte, message []byte, address string) bool {
+	// 获取签名中包含的公钥
+	pubkey, err := crypto.Ecrecover(message, signature)
+	if err != nil {
+		return false
+	}
+	// 将公钥转换成以太坊地址
+	pubKeyECDSA, err := crypto.UnmarshalPubkey(pubkey)
+	if err != nil {
+		return false
+	}
+	// 使用公钥生成以太坊地址
+	recoveredAddress := crypto.PubkeyToAddress(*pubKeyECDSA)
+	// 将目标地址转换成以太坊地址
+	targetAddress := common.HexToAddress(address)
+	// 判断生成的地址是否为目标地址，如果是则说明签名来自自己
+	return bytes.Equal(recoveredAddress.Bytes(), targetAddress.Bytes())
 }
 
 func GetUserBalanceHandler(c *gin.Context) {

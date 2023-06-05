@@ -41,16 +41,20 @@ func SetUpRouter(mode string) *gin.Engine {
 		v1.POST("/post/create", controller.CreatePostHandler)
 		//查询帖子  /post/list?page=x&size=y
 		v1.GET("/post/list", controller.GetPostsListHandler)
-		////查询一些帖子---模糊查询--对内容版本
+		//查询一些帖子---模糊查询--对内容版本
 		v1.GET("/post/like-content/:word", controller.GetPostByContentLIKEHandler)
 		//查询一些帖子---模糊查询--对标题
 		v1.GET("/post/like-title/:word", controller.GetPostByTitleLIKEHandler)
+
 		//查询整个帖子（主贴+回复）
 		v1.GET("/post/getpost/:postid", controller.GetPostByPostID)
+
 		//对帖子发表评论
 		v1.POST("post/:postID/response/", controller.CreateResponseHandler)
+
 		//查询用户信息
 		v1.GET("/user/:user_address/getuserInformation", controller.GetUserInformation)
+
 		//点赞的函数
 		//v1.POST("/post/:postID/givelike", controller.GiveLikeByPostIDHandler)
 
