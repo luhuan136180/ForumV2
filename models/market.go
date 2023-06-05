@@ -9,7 +9,7 @@ type Skin struct {
 	SkinUrl    string    `json:"skin_Url"db:"skin_url"`
 	CreateTime time.Time `json:"createTime"db:"create_time"`
 	Status     int       `json:"status"db:"status"`
-	Price      int       `json:"price"db:"price"`
+	Price      string    `json:"price"db:"price"`
 	SkinAdd    string    `json:"skin_address"db:"skin_address"`
 }
 

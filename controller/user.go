@@ -190,8 +190,10 @@ func ChangeUserInformationHandler(c *gin.Context) {
 
 //修改用户的背景---用户和ksin——id的对应是在购买函数
 func ChangeUserBackGroundHandler(c *gin.Context) {
+	useraddress := c.Param("user_address")
 
 	changeinfo := new(models.ChangeBCGByUser)
+	changeinfo.UserAddress = useraddress
 	if err := c.ShouldBindJSON(changeinfo); err != nil {
 		zap.L().Error("Change	UserBackGround is failed", zap.Error(err))
 		tanser, ok := err.(validator.ValidationErrors)
@@ -202,7 +204,7 @@ func ChangeUserBackGroundHandler(c *gin.Context) {
 		ResponseErrorWithMsg(c, CodeInvalidParam, removeTopStruct(tanser.Translate(trans)))
 		return
 	}
-
+	fmt.Println("changeinfo:", changeinfo)
 	data, err := logic.ChangeUserBackGround(changeinfo)
 	if err != nil {
 		zap.L().Error("logic.ChangeUserBackGround is failed", zap.Error(err))
@@ -220,7 +222,11 @@ func ChangeUserBackGroundHandler(c *gin.Context) {
 }
 
 func ChangeUserPHHandler(c *gin.Context) {
+	useraddress := c.Param("user_address")
+
 	changeinfo := new(models.ChangeHPByUser)
+
+	changeinfo.UserAddress = useraddress
 	if err := c.ShouldBindJSON(changeinfo); err != nil {
 		zap.L().Error("Change	UserBackGround is failed", zap.Error(err))
 		tanser, ok := err.(validator.ValidationErrors)
